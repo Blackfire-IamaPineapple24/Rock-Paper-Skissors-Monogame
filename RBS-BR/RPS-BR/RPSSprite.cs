@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System;
 using System.Diagnostics;
 
-namespace RockPaperScissors
+namespace RPS_BR
 {
 	class RPSSprite
 	{
 		Texture2D _rockTxr, _paperTxr, _scissorsTxr;
-		float _spriteSpeed = 2.0f;
+		float _spriteSpeed = 200.0f;
 		Rectangle _boundary, _drawRectangle;
 		Vector2 _position, _velocity;
 		SpriteType _currentType;
@@ -18,7 +18,7 @@ namespace RockPaperScissors
 
 		// Constructor
 		// Needs to store all three RPS textures, as well as the RNG and window size
-		//(Texture2D fireTxr, Texture2D lightningTxr, Texture2D waterTxr, Random rng, Point windowSize) // TODO - add the the right keywords to declare the constructor for RPSSprite ************************************************************
+		public RPSSprite(Texture2D fireTxr, Texture2D lightningTxr, Texture2D waterTxr, Random rng, Point windowSize)
 		{
 			_rockTxr = fireTxr;
 			_paperTxr = lightningTxr;
@@ -38,13 +38,13 @@ namespace RockPaperScissors
 		}
 
 
-		public void Update(GameTime gameTime, List<RPSSprite> spriteList, Random rng) // TODO - add the right keywords at the start of the line to declare the Update method ************************************************************
+		public void Update(GameTime gameTime, List<RPSSprite> spriteList, Random rng)
 		{
 			// Do not update if the sprite is dead
 			if (!dead)
 			{
 				// Use the sprite list to check collision against all other sprites
-				//foreach () // TODO - make a foreach loop that checks every sprite in the sprite list, using the temporary name "otherSprite" ************************************************************
+				foreach (RPSSprite otherSprite in spriteList)
 				{
 					// If we find another sprite that is not dead...
 					if (!otherSprite.dead && otherSprite != this)
@@ -69,10 +69,10 @@ namespace RockPaperScissors
 				}
 
 				// Update the position using the velocity
-				// _position // TODO - add code to update _position ************************************************************
+				_position +=  _velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-				// Use the current position to update the draw rectangle, used in both Draw in the collision detection.
-				_drawRectangle = new Rectangle((int)_position.X, (int)_position.Y, CurrentTxr().Width, CurrentTxr().Height);
+			   // Use the current position to update the draw rectangle, used in both Draw in the collision detection.
+			   _drawRectangle = new Rectangle((int)_position.X, (int)_position.Y, CurrentTxr().Width, CurrentTxr().Height);
 
 				// If we've hit the boundary, bounce us off it
 				if (_position.X <= _boundary.X || _position.X >= _boundary.X + _boundary.Width) _velocity.X *= -1;
@@ -84,8 +84,8 @@ namespace RockPaperScissors
 		public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
 		{
 			// If the sprite is dead, draw it as a transparent black ghost
-			if (dead) spriteBatch.Draw(CurrentTxr(), _drawRectangle, new Color(Color.White, 255)); // TODO - Make the ghost sprites black and transparent ************************************************************
-																								   // otherwise draw it normally.
+			if (dead) spriteBatch.Draw(CurrentTxr(), _drawRectangle, new Color(Color.Black, 50));
+
 			else spriteBatch.Draw(CurrentTxr(), _drawRectangle, Color.White);
 		}
 

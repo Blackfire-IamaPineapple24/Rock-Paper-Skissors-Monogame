@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 
-namespace RockPaperScissors
+namespace RPS_BR
 {
 	public class Game1 : Game
 	{
@@ -12,7 +12,7 @@ namespace RockPaperScissors
 		private SpriteBatch _spriteBatch;
 
 		Texture2D _rockTxr, _paperTxr, _scissorsTxr, _backgroundTxr;
-		List<RPSSprite> _spriteList = new List<RPSSprite>(); // TODO - add code to initialise an empty list of RPSSprite ************************************************************
+		List<RPSSprite> _spriteList = new List<RPSSprite>();
 		Random _rng = new Random();
 
 		// Store the size of the window in a Point
@@ -31,7 +31,9 @@ namespace RockPaperScissors
 		protected override void Initialize()
 		{
 			// Set the window size.
-			// TODO - resize the window using the window size variable ************************************************************
+			_graphics.PreferredBackBufferWidth = _windowSize.X;
+			_graphics.PreferredBackBufferHeight = _windowSize.Y;
+			_graphics.ApplyChanges();
 
 			base.Initialize();
 		}
@@ -41,7 +43,10 @@ namespace RockPaperScissors
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// Load all the textures.
-			// TODO - load in all the textures and store them as reference variables ************************************************************
+			_rockTxr = Content.Load<Texture2D>("SpriteRock");
+			_paperTxr = Content.Load<Texture2D>("SpritePaper");
+			_scissorsTxr = Content.Load<Texture2D>("SpriteScissors");
+			_backgroundTxr = Content.Load<Texture2D>("Background");
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -50,7 +55,7 @@ namespace RockPaperScissors
 			if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
 			// Add sprites until there are enough.
-			while (false) // TODO - make a condition that adds sprites until the number of sprites matches _spriteTotal ************************************************************
+			while (_spriteList.Count != _spriteTotal)
 				_spriteList.Add(new RPSSprite(_rockTxr, _paperTxr, _scissorsTxr, _rng, _windowSize));
 
 			// Each sprite should call it's own Update() function.
@@ -69,7 +74,7 @@ namespace RockPaperScissors
 
 			// Each sprite should call it's own Draw() method.
 			// They need the gameTime access to the sprite batch.
-			//foreach (); // TODO - make a foreach loop that calls the Draw method for each sprite ************************************************************
+			foreach (RPSSprite sprite in _spriteList) sprite.Draw(gameTime, _spriteBatch);
 
 			_spriteBatch.End();
 
